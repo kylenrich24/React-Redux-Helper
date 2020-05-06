@@ -1,68 +1,186 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 🌀 React-Helper4_Forms_APIRequest 🌀
 
-## Available Scripts
+<img src="https://miro.medium.com/max/800/0*2QXFv38dyGxpx5eK.png" height=500 width=900>
+<br>
+<br>
 
-In the project directory, you can run:
+<h2>🌀 Redux</h2>
+<br>
+&nbsp; 🌀 &nbsp; &nbsp; STATE management library <br>
+<br>
+<img src="https://www.esri.com/arcgis-blog/wp-content/uploads/2017/09/react-redux-overview.png" height=230 width=400>
+<br>
+<img src="https://res.cloudinary.com/practicaldev/image/fetch/s--VtRaY29J--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/fewc8ez6r2e2agah717y.png" height=230 width=400>
+<br>
+ACTION CREATOR/ACTION
 
-### `npm start`
+```javascript
+const createPolicy = (name, amount) => {      // Action Creator
+  return {                                    // Action
+    type: 'CREATE_POLICY',
+    payload: {
+      name: name,
+      amount: amount
+    }
+  }
+}
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<br>
+REDUCERS
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```javascript
+const accounting = (bagOfMoney = 0, action) => {     // state and action params
+  switch (action.type){
+    case 'CREATE_CLAIM':
+      return bagOfMoney - action.payload.amountOfMoneyToCollect
+    case 'CREATE_POLICY':
+      return bagOfMoney + action.payload.amount
+    default:
+      return bagOfMoney
+  }
+}
+```
 
-### `npm test`
+<br>
+&nbsp; 🌀 &nbsp; &nbsp;Everytime we want to change state, we ALWAYS have to return a new object/array as opposed to modifying existing data structures.
+<br><br>
+&nbsp; 🌀 &nbsp; &nbsp;After creating our Action Creators and Reducers we're going to wire them all together in <strong>STORE</strong>
+<br><br><br>
+STORE
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```javascript
+const departments = combineReducers({  // our store is composed of the reducers we made
+  accounting: accounting,
+  claimsHistory: claimsHistory,
+  policies: policies
+})
+```
 
-### `npm run build`
+```javascript
+const store = createStore(departments) // creating our store with our combined reducers
+```
+<br>
+&nbsp; 🌀 &nbsp; &nbsp;We send actions to reducers using dispatch, this modifies state/store()<br>
+<br>
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```javascript
+store.dispatch(createPolicy('Alex', 20))
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+<br>
+<br>
+<h2>🌀 React-Redux</h2>
+<br>
+&nbsp; 🌀 &nbsp; &nbsp; React-Redux &nbsp; &nbsp; gets react and redux to work together <br><br>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+$ npm install --save redux react-redux
+```
 
-### `npm run eject`
+<br>
+We get 2 main things from React-Redux:
+<br>
+<br>
+&nbsp; 🌀 &nbsp; &nbsp; Provider &nbsp; - we wire up our STORE here; provides state to the whole <App /> <br>
+&nbsp; 🌀 &nbsp; &nbsp; Connect() &nbsp; - communicates with the Provider so other components can connect directly to the Provider even if there are other components between them
+<br>
+<img src="https://www.kirupa.com/react/images/redux_counter_hoc_200.png" height=400width=300>
+<br>
+<br>
+<img src="https://www.kirupa.com/react/images/react_redux_app_datastore_200.png" height=250 width=360>
+<br>
+<br>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<h3> React-Redux Project Structure</h3>
+<br>
+&nbsp; 📁 &nbsp; &nbsp; src <br>
+&nbsp;&nbsp;&nbsp;&nbsp; 📁 &nbsp; &nbsp; actions&nbsp;&nbsp - action creators <br> 
+&nbsp;&nbsp;&nbsp;&nbsp; 📁 &nbsp; &nbsp; components&nbsp;&nbsp - react components <br> 
+&nbsp;&nbsp;&nbsp;&nbsp; 📁 &nbsp; &nbsp; reducers&nbsp;&nbsp - reducers <br> 
+&nbsp;&nbsp;&nbsp;&nbsp; 📜 &nbsp; &nbsp; index.js&nbsp;&nbsp - configs for react and redux <br> 
+<br>
+<br>
+<h3>&nbsp; 📁 &nbsp;  actions</h3>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```javascript
+export const selectSong = (song) => {
+  return {
+    type: "SONG_SELECTED",
+    payload: song,
+  };
+};
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+<br>
+<br>
+<h3>&nbsp; 📁 &nbsp;  reducers</h3>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+```javascript
+import {combineReducers} from 'redux'
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+import songsReducer
+import selectedSongReducer
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+export default combineReducers({
+  songs: songsReducer,
+  selectedSong: selectedSongReducer
+})
 
-### Code Splitting
+```
+<br>
+<br>
+<h3>&nbsp; 📜 &nbsp;index.js</h3>
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Analyzing the Bundle Size
+```javascript
+import React from "react";                // React config
+import ReactDOM from "react-dom";
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+import { Provider } from "react-redux";   // React-Redux config
+import { createStore } from "redux";
 
-### Making a Progressive Web App
+import App from "./components/App";
+import reducers from "./reducers";        // all of our combined reducers
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+const store = createStore(reducers);      // creating Store with combined reducers
 
-### Advanced Configuration
+ReactDOM.render(
+  <Provider store={store}>                // wiring up the Store with Provider
+    <App />
+  </Provider>,
+  document.querySelector("#root")
+);
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+```
 
-### Deployment
+<br>
+<br>
+<h3> Connect()</h3>
+<br>
+Let's connect SongList component
+<br><br>
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```javascript
+import {connect} from 'react-redux'
+import {selectSong} from '../actions'       // action-creator
 
-### `npm run build` fails to minify
+const mapStateToProps = (state) => {        // we're putting state.songs to props.songs of <SongList />
+  return { songs: state.songs };
+};
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+export default connect(mapStateToProps, {selectSong})(SongList);    // connect config; state and action -creator
+// passing our action-creator to connect() grants it dispatch(); gives it the ability to change state
+// arbitrarily calling it on its own wont change the state
+```
+
+
+
+
+
+
+
+
+
+
