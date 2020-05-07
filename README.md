@@ -188,7 +188,7 @@ export default connect(mapStateToProps, {selectSong})(SongList);    // connect c
 // passing our action-creator to connect() grants it dispatch(); gives it the ability to change state
 // arbitrarily calling it on its own wont change the state
 ```
-
+#### * mapStateToProps(state, ownProps) - has 2 params
 
 
 
